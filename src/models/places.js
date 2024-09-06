@@ -3,7 +3,6 @@ import connection from "../db.js";
 import { findRecommendKey } from "./find.js";
 import fs from "fs";
 import { __srcdirname } from "../fs.js";
-import path from "path";
 
 const tableName = "places";
 
@@ -23,11 +22,25 @@ export const create = async (req, res) => {
     }
     const imgPath = `/download/${req.file.filename}`;
 
+    // uid 필드가 올바르게 전달되는지 확인
+    if (!body.uid) {
+      return res
+        .status(400)
+        .json({ success: false, err: { sqlMessage: "UID is missing" } });
+    }
+
     const [results, _] = await connection.query(
       "INSERT INTO " +
         tableName +
-        " (img, `name`, introduction, explanation, `address`) VALUES (?, ?, ?, ?, ?)",
-      [imgPath, body.name, body.introduction, body.explanation, body.address]
+        " (img, `name`, introduction, explanation, `address`, uid) VALUES (?, ?, ?, ?, ?, ?)",
+      [
+        imgPath,
+        body.name,
+        body.introduction,
+        body.explanation,
+        body.address,
+        body.uid,
+      ]
     );
 
     console.log("\n" + body.name + " 장소 데이터 생성 완료");

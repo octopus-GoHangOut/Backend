@@ -1,4 +1,4 @@
-import express, { query } from "express";
+import express from "express";
 import connection from "../db.js";
 import { findAccountKey } from "./find.js";
 

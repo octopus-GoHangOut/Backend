@@ -61,18 +61,19 @@ export async function findRecommendKey(query, tableName) {
     "explanation",
     "address",
     "heart",
+    "uid",
   ];
   let values = [];
-  let columns = [];
+  let ableColumns = [];
 
   for (const condition of conditions) {
     if (query[condition] !== undefined) {
-      columns.push(condition);
       values.push(query[condition]);
+      ableColumns.push(condition);
       isUndifined = false;
     }
   }
-  sqlQuery += `(${columns}) = (?)`;
+  sqlQuery += `(${ableColumns}) = (?)`;
 
   let sqlResults = undefined;
 
